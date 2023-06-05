@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Google OAuth Test</title>
+</head>
+<body>
+<script src="https://accounts.google.com/gsi/client" onload="console.log('TODO: add onload function')">
+</script>
+<script>
+  const params = {
+    "client_id": "413585025782-a7k02ml0f6v76js89jdkmf30q1ue5kv6.apps.googleusercontent.com",
+    "scope": "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
+    ux_mode: "popup",
+    callback: async (googleRes) => {
+      console.log(googleRes);
+      const res = await fetch("http://localhost:3000/api/main/auth/google/signup", {
+        method: "POST",
+        body: JSON.stringify({ authCode: googleRes.code }),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        credentials: 'include'
+      });
+
+      const parsedRes = await res.json();
+
+      const div = document.getElementById("result");
+      div.innerText = `Success, ${ parsedRes.email }`;
+      setTimeout(() => {
+        div.innerText = "";
+      }, 5000);
+
+
+      const res2 = await fetch("http://localhost:3000/api/main/auth/standard/logout", {
+        method: "POST",
+        credentials: 'include'
+      });
+
+      const parsedRes2 = await res2.json();
+      console.log(parsedRes2);
+    }
+  };
+  const client = google.accounts.oauth2.initCodeClient(params);
+</script>
+<button style="margin: 50px" onclick="client.requestCode();">Sign In</button>
+<div id="result" style="margin: 100px"></div>
+</body>
+</html>
