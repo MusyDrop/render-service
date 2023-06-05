@@ -6,7 +6,8 @@ export interface MinioConfig {
   host: string;
   port: number;
   buckets: {
-    audioFilesBucket: string;
+    templatesBucket: string;
+    artifactsBucket: string;
   };
   accessKey: string;
   secretKey: string;
@@ -22,8 +23,12 @@ export const minioConfigSchema: () => JoiConfig<MinioConfig> = () => ({
     schema: Joi.number().required()
   },
   buckets: {
-    audioFilesBucket: {
-      value: process.env.MINIO_AUDIO_FILES_BUCKET as string,
+    templatesBucket: {
+      value: process.env.MINIO_TEMPLATES_BUCKET as string,
+      schema: Joi.string().required()
+    },
+    artifactsBucket: {
+      value: process.env.MINIO_ARTIFACTS_BUCKET as string,
       schema: Joi.string().required()
     }
   },

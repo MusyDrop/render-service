@@ -7,6 +7,7 @@ import { S3Module } from '../s3/s3.module';
 import { DbModule } from '../db/db.module';
 import { MetadataMiddleware } from '../common/middlewares/metadata.middleware';
 import { SentryModule } from '../sentry/sentry.module';
+import { TemplatesModule } from '../templates/templates.module';
 
 @Module({
   imports: [
@@ -14,7 +15,8 @@ import { SentryModule } from '../sentry/sentry.module';
     LoggerModule.forRoot(),
     S3Module,
     DbModule,
-    SentryModule
+    SentryModule,
+    TemplatesModule
   ],
   controllers: [AppController],
   providers: [AppService]
