@@ -64,4 +64,13 @@ export class TemplatesService {
 
     return template;
   }
+
+  public async findAll(props: DeepPartial<Template>): Promise<Template[]> {
+    return await this.templatesRepository.findBy({
+      id: props.id,
+      guid: props.guid,
+      name: props.name,
+      archiveFileName: props.archiveFileName
+    });
+  }
 }

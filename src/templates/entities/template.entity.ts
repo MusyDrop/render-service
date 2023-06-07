@@ -21,7 +21,7 @@ export class Template {
   @Column({ unique: true })
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   archiveFileName: string;
 
   @CreateDateColumn({ name: 'created_at' })

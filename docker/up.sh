@@ -1,1 +1,1 @@
-docker-compose -p main-service up
+docker-compose -p render-service up

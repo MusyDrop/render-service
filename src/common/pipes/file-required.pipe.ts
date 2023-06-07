@@ -7,7 +7,6 @@ export class FileRequiredPipe extends FileValidator {
   }
 
   public isValid(file?: unknown): boolean | Promise<boolean> {
-    console.log(file);
     return !!file;
   }
 }
