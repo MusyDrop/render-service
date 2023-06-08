@@ -4,12 +4,19 @@ import { Job } from './entities/job.entity';
 import { DeepPartial, Repository } from 'typeorm';
 import { TemplatesService } from '../templates/templates.service';
 import { NotFoundError } from 'rxjs';
+import { KafkaService } from '../kafka/kafka.service';
+import { AnyObject } from '../utils/utility-types';
+import { RenderJobPayload } from './interfaces/render-job-payload.interface';
+import { JobStatus } from './enums/job-status.enum';
 
 @Injectable()
 export class JobsService {
+  private readonly renderJobsTopicName = 'AERendererJobs';
+
   constructor(
     @InjectRepository(Job) private readonly jobsRepository: Repository<Job>,
-    private readonly templatesService: TemplatesService
+    private readonly templatesService: TemplatesService,
+    private readonly kafkaService: KafkaService
   ) {}
 
   public async create(props: DeepPartial<Job>): Promise<Job> {
@@ -72,5 +79,46 @@ export class JobsService {
         status: props.status
       }
     );
+  }
+
+  public async findOneWithTemplateNullable(
+    props: DeepPartial<Job>
+  ): Promise<Job | null> {
+    return this.jobsRepository.findOne({
+      relations: {
+        template: true
+      },
+      where: {
+        id: props.id,
+        guid: props.guid,
+        template: { id: props.id, guid: props.guid },
+        audioFileName: props.audioFileName,
+        settings: props.settings
+      }
+    });
+  }
+
+  public async findOneWithTemplate(props: DeepPartial<Job>): Promise<Job> {
+    const withTemplate = await this.findOneWithTemplateNullable(props);
+
+    if (!withTemplate) {
+      throw new NotFoundError('Job was not found');
+    }
+
+    return withTemplate;
+  }
+
+  public async render(guid: string, settings: AnyObject): Promise<Job> {
+    const job = await this.findOneWithTemplate({ guid });
+    await this.update({ id: job.id, settings, status: JobStatus.SUBMITTED });
+
+    await this.kafkaService.emit<RenderJobPayload>(this.renderJobsTopicName, {
+      jobGuid: job.guid,
+      settings: job.settings,
+      archiveFileName: job.template.archiveFileName,
+      audioFileName: job.audioFileName
+    });
+
+    return await this.findOne({ id: job.id });
   }
 }

@@ -27,6 +27,6 @@ import { ExtendedConfigService } from '../config/extended-config.service';
     })
   ],
   providers: [KafkaService],
-  exports: [ClientsModule]
+  exports: [ClientsModule, KafkaService]
 })
 export class KafkaModule {}

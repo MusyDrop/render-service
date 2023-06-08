@@ -37,7 +37,7 @@ export class Job {
   @Column({ type: 'jsonb', default: {} })
   settings: AnyObject;
 
-  @Column()
+  @Column({ default: JobStatus.PENDING })
   status: JobStatus;
 
   @CreateDateColumn({ name: 'created_at' })

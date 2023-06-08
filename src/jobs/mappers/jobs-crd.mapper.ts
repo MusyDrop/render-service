@@ -9,6 +9,7 @@ import { Job } from '../entities/job.entity';
 import { GetAllJobsResponseDto } from '../dtos/response/get-all-jobs-response.dto';
 import { JobDto } from '../dtos/job.dto';
 import { SuccessResponseDto } from 'src/common/dtos/success-response.dto';
+import { RenderJobResponseDto } from '../dtos/response/render-job-response.dto';
 
 @Injectable()
 export class JobsCrdMapper implements ResponseDtoMapper<JobsController> {
@@ -31,5 +32,11 @@ export class JobsCrdMapper implements ResponseDtoMapper<JobsController> {
 
   public updateMapper(): SuccessResponseDto {
     return new SuccessResponseDto('Update job');
+  }
+
+  public renderMapper(job: Job): RenderJobResponseDto {
+    return {
+      job: Job.toDto(job) as JobDto
+    };
   }
 }
