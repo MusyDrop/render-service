@@ -10,15 +10,6 @@ async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
   const configService = app.get<ExtendedConfigService>(ExtendedConfigService);
 
-  await app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.KAFKA,
-    options: {
-      client: {
-        brokers: configService.get('kafka.brokers')
-      }
-    }
-  });
-
   const logger = app.get(Logger);
   const globalPrefix = configService.get('server.globalPrefix');
 
@@ -48,7 +39,6 @@ async function bootstrap(): Promise<void> {
   const port = configService.get('server.port');
   const baseUrl = configService.get('server.baseUrl');
 
-  await app.startAllMicroservices();
   await app.listen(port);
 
   logger.log(

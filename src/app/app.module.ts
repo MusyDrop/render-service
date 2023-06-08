@@ -8,6 +8,8 @@ import { DbModule } from '../db/db.module';
 import { MetadataMiddleware } from '../common/middlewares/metadata.middleware';
 import { SentryModule } from '../sentry/sentry.module';
 import { TemplatesModule } from '../templates/templates.module';
+import { KafkaModule } from '../kafka/kafka.module';
+import { JobsModule } from '../jobs/jobs.module';
 
 @Module({
   imports: [
@@ -16,7 +18,9 @@ import { TemplatesModule } from '../templates/templates.module';
     S3Module,
     DbModule,
     SentryModule,
-    TemplatesModule
+    TemplatesModule,
+    KafkaModule,
+    JobsModule
   ],
   controllers: [AppController],
   providers: [AppService]
