@@ -7,7 +7,9 @@ export type JoiConfigProps<ValueType> = {
 };
 
 export type JoiConfigValue<ValueType> = ValueType extends AnyObject
-  ? JoiConfig<ValueType>
+  ? ValueType extends ArrayLike<any>
+    ? JoiConfigProps<ValueType>
+    : JoiConfig<ValueType>
   : JoiConfigProps<ValueType>;
 
 export type JoiConfig<ConfigType> = {

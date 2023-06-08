@@ -4,12 +4,22 @@ import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino';
 import { ExtendedConfigService } from './config/extended-config.service';
 import cookieParser from 'cookie-parser';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get<ExtendedConfigService>(ExtendedConfigService);
+
+  await app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        brokers: configService.get('kafka.brokers')
+      }
+    }
+  });
 
   const logger = app.get(Logger);
-  const configService = app.get<ExtendedConfigService>(ExtendedConfigService);
   const globalPrefix = configService.get('server.globalPrefix');
 
   app.use(cookieParser());
@@ -30,7 +40,7 @@ async function bootstrap(): Promise<void> {
 
   app.enableCors({
     credentials: true,
-    origin: 'http://localhost:9999'
+    origin: configService.get('server.clientBaseUrl')
   });
   app.enableShutdownHooks();
 
@@ -38,6 +48,7 @@ async function bootstrap(): Promise<void> {
   const port = configService.get('server.port');
   const baseUrl = configService.get('server.baseUrl');
 
+  await app.startAllMicroservices();
   await app.listen(port);
 
   logger.log(
