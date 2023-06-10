@@ -37,6 +37,9 @@ export class Job {
   @Column({ type: 'uuid', name: 'user_guid' })
   userGuid: string;
 
+  @Column({ type: 'uuid', name: 'project_guid' })
+  projectGuid: string;
+
   @Column({ type: 'jsonb', default: {} })
   settings: AnyObject;
 

@@ -5,6 +5,7 @@ import { CreateTemplateResponseDto } from '../dto/response/create-template-respo
 import { Template } from '../entities/template.entity';
 import { TemplateDto } from '../dto/template.dto';
 import { GetAllTemplatesResponseDto } from '../dto/response/get-all-templates-response.dto';
+import { GetOneTemplateResponseDto } from '../dto/response/get-one-template-response.dto';
 
 @Injectable()
 export class TemplatesCrdMapper
@@ -19,6 +20,12 @@ export class TemplatesCrdMapper
   public findAllMapper(templates: Template[]): GetAllTemplatesResponseDto {
     return {
       templates: templates.map((t) => Template.toDto(t)) as TemplateDto[]
+    };
+  }
+
+  public findOneMapper(template: Template): GetOneTemplateResponseDto {
+    return {
+      template: Template.toDto(template) as TemplateDto
     };
   }
 }

@@ -8,7 +8,8 @@ import {
   FileTypeValidator,
   Get,
   UseGuards,
-  Req
+  Req,
+  Param
 } from '@nestjs/common';
 import { TemplatesService } from './templates.service';
 import { CreateTemplateDto } from './dto/create-template.dto';
@@ -19,6 +20,7 @@ import { TemplatesCrdMapper } from './mappers/templates-crd.mapper';
 import { GetAllTemplatesResponseDto } from './dto/response/get-all-templates-response.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { Request } from 'express';
+import { GetOneTemplateResponseDto } from './dto/response/get-one-template-response.dto';
 
 @Controller('/templates')
 export class TemplatesController {
@@ -62,5 +64,14 @@ export class TemplatesController {
       userGuid: req.user.guid
     });
     return this.responseMapper.findAllMapper(templates);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/:guid')
+  public async findOne(
+    @Param('guid') guid: string
+  ): Promise<GetOneTemplateResponseDto> {
+    const template = await this.templatesService.findOne({ guid });
+    return this.responseMapper.findOneMapper(template);
   }
 }

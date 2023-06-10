@@ -64,7 +64,8 @@ export class TemplatesService {
 
     const template = await this.templatesRepository.save({
       name: dto.name,
-      archiveFileName
+      archiveFileName,
+      userGuid
     });
 
     return template;

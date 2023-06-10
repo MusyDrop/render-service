@@ -33,7 +33,8 @@ export class JobsController {
     const job = await this.jobsService.create({
       template: { guid: dto.templateGuid },
       audioFileName: dto.audioFileName,
-      settings: dto.settings
+      settings: dto.settings,
+      projectGuid: dto.projectGuid
     });
     return this.responseMapper.createMapper(job);
   }

@@ -29,7 +29,9 @@ export class JobsService {
     return await this.jobsRepository.save({
       template: { id: template.id },
       audioFileName: props.audioFileName,
-      settings: props.settings
+      settings: props.settings,
+      userGuid: props.userGuid,
+      projectGuid: props.projectGuid
     });
   }
 
@@ -40,7 +42,9 @@ export class JobsService {
       status: props.status,
       template: { id: props.id },
       audioFileName: props.audioFileName,
-      settings: props.settings
+      settings: props.settings,
+      userGuid: props.userGuid,
+      projectGuid: props.projectGuid
     });
   }
 
@@ -60,7 +64,9 @@ export class JobsService {
       guid: props.guid,
       template: { id: props.id, guid: props.guid },
       audioFileName: props.audioFileName,
-      settings: props.settings
+      settings: props.settings,
+      userGuid: props.userGuid,
+      projectGuid: props.userGuid
     });
   }
 
@@ -73,10 +79,14 @@ export class JobsService {
       {
         id: props.id,
         guid: props.guid,
-        template: { id: props.id }
+        template: { id: props.id },
+        userGuid: props.userGuid,
+        projectGuid: props.projectGuid
       },
       {
-        status: props.status
+        status: props.status,
+        projectGuid: props.projectGuid,
+        userGuid: props.userGuid
       }
     );
   }
@@ -93,7 +103,9 @@ export class JobsService {
         guid: props.guid,
         template: { id: props.id, guid: props.guid },
         audioFileName: props.audioFileName,
-        settings: props.settings
+        settings: props.settings,
+        userGuid: props.userGuid,
+        projectGuid: props.projectGuid
       }
     });
   }
