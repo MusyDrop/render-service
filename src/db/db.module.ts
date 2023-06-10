@@ -19,7 +19,7 @@ import { ExtendedConfigService } from '../config/extended-config.service';
           password: config.get('postgres.password'),
           database: config.get('postgres.database'),
           synchronize: true, // remove after db scaffolding,
-          logging: false,
+          logging: true,
           autoLoadEntities: true
         };
       }

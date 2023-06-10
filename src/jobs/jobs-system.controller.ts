@@ -16,7 +16,7 @@ export class JobsSystemController {
     @Param('guid') guid: string,
     @Body() dto: UpdateJobDto
   ): Promise<SuccessResponseDto> {
-    await this.jobsService.update({
+    await this.jobsService.updateById({
       guid,
       status: dto.status,
       settings: dto.settings

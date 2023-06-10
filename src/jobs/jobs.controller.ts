@@ -43,12 +43,14 @@ export class JobsController {
   @UseGuards(AuthGuard)
   @Get('/me')
   public async findAll(@Req() req: Request): Promise<GetAllJobsResponseDto> {
-    const jobs = await this.jobsService.findAll({ userGuid: req.user.guid });
+    const jobs = await this.jobsService.findAllWithTemplate({
+      userGuid: req.user.guid
+    });
     return this.responseMapper.findAllMapper(jobs);
   }
 
   @UseGuards(AuthGuard)
-  @Post('/:guid')
+  @Post('/:guid/render')
   public async render(
     @Req() req: Request,
     @Param('guid') guid: string,

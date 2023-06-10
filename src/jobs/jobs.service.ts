@@ -40,7 +40,7 @@ export class JobsService {
       id: props.id,
       guid: props.guid,
       status: props.status,
-      template: { id: props.id },
+      template: { id: props.template?.id },
       audioFileName: props.audioFileName,
       settings: props.settings,
       userGuid: props.userGuid,
@@ -58,15 +58,20 @@ export class JobsService {
     return job;
   }
 
-  public async findAll(props: DeepPartial<Job>): Promise<Job[]> {
-    return await this.jobsRepository.findBy({
-      id: props.id,
-      guid: props.guid,
-      template: { id: props.id, guid: props.guid },
-      audioFileName: props.audioFileName,
-      settings: props.settings,
-      userGuid: props.userGuid,
-      projectGuid: props.userGuid
+  public async findAllWithTemplate(props: DeepPartial<Job>): Promise<Job[]> {
+    return await this.jobsRepository.find({
+      relations: {
+        template: true
+      },
+      where: {
+        id: props.id,
+        guid: props.guid,
+        template: { id: props.template?.id, guid: props.template?.guid },
+        audioFileName: props.audioFileName,
+        settings: props.settings,
+        userGuid: props.userGuid,
+        projectGuid: props.projectGuid
+      }
     });
   }
 
@@ -74,14 +79,10 @@ export class JobsService {
    * Only status has to be updatable
    * @param props
    */
-  public async update(props: DeepPartial<Job>): Promise<void> {
+  public async updateById(props: DeepPartial<Job>): Promise<void> {
     await this.jobsRepository.update(
       {
-        id: props.id,
-        guid: props.guid,
-        template: { id: props.id },
-        userGuid: props.userGuid,
-        projectGuid: props.projectGuid
+        id: props.id
       },
       {
         status: props.status,
@@ -101,7 +102,7 @@ export class JobsService {
       where: {
         id: props.id,
         guid: props.guid,
-        template: { id: props.id, guid: props.guid },
+        template: { id: props.template?.id, guid: props.template?.guid },
         audioFileName: props.audioFileName,
         settings: props.settings,
         userGuid: props.userGuid,
@@ -126,7 +127,11 @@ export class JobsService {
     settings: AnyObject
   ): Promise<Job> {
     const job = await this.findOneWithTemplate({ guid, userGuid });
-    await this.update({ id: job.id, settings, status: JobStatus.SUBMITTED });
+    await this.updateById({
+      id: job.id,
+      settings,
+      status: JobStatus.SUBMITTED
+    });
 
     await this.kafkaService.emit<RenderJobPayload>(this.renderJobsTopicName, {
       jobGuid: job.guid,

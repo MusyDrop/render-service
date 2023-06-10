@@ -61,7 +61,7 @@ export class Job {
       guid: job.guid,
       status: job.status,
       createdAt: job.createdAt,
-      templateGuid: job.template.guid,
+      templateGuid: job.template?.guid,
       audioFileName: job.audioFileName,
       settings: job.settings,
       userGuid: job.userGuid

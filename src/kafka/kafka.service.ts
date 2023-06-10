@@ -16,7 +16,7 @@ export class KafkaService implements OnModuleInit {
     topicName: string,
     data: T
   ): Promise<void> {
-    await this.clientKafka.emit(top, data);
+    await this.clientKafka.emit(topicName, data);
   }
 
   public async onModuleInit(): Promise<void> {
