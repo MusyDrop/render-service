@@ -19,7 +19,10 @@ import { ExtendedConfigService } from '../config/extended-config.service';
                 clientId: 'render-service',
                 brokers: config.get('kafka.brokers')
               },
-              producerOnlyMode: true
+              producerOnlyMode: true,
+              producer: {
+                allowAutoTopicCreation: true
+              }
             }
           })
         }

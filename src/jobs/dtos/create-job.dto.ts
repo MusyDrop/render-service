@@ -10,6 +10,10 @@ import { AnyObject } from '../../utils/utility-types';
 export class CreateJobDto {
   @IsUUID()
   templateGuid: string;
+
+  @IsUUID()
+  projectGuid: string;
+
   // As specified on S3
   @IsString()
   @IsNotEmpty()
