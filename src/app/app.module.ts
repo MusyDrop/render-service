@@ -10,6 +10,8 @@ import { SentryModule } from '../sentry/sentry.module';
 import { TemplatesModule } from '../templates/templates.module';
 import { KafkaModule } from '../kafka/kafka.module';
 import { JobsModule } from '../jobs/jobs.module';
+import { MainServiceModule } from '../main-service/main-service.module';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -20,7 +22,9 @@ import { JobsModule } from '../jobs/jobs.module';
     SentryModule,
     TemplatesModule,
     KafkaModule,
-    JobsModule
+    JobsModule,
+    MainServiceModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService]

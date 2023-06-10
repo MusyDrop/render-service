@@ -34,6 +34,9 @@ export class Job {
   @Column({ name: 'audio_file_name' })
   audioFileName: string;
 
+  @Column({ type: 'uuid', name: 'user_guid' })
+  userGuid: string;
+
   @Column({ type: 'jsonb', default: {} })
   settings: AnyObject;
 
@@ -57,7 +60,8 @@ export class Job {
       createdAt: job.createdAt,
       templateGuid: job.template.guid,
       audioFileName: job.audioFileName,
-      settings: job.settings
+      settings: job.settings,
+      userGuid: job.userGuid
     };
   }
 }

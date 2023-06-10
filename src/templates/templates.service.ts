@@ -26,6 +26,7 @@ export class TemplatesService {
       id: props.id,
       guid: props.guid,
       name: props.name,
+      userGuid: props.userGuid,
       archiveFileName: props.archiveFileName
     });
   }
@@ -41,10 +42,14 @@ export class TemplatesService {
   }
 
   public async create(
+    userGuid: string,
     archive: Buffer,
     dto: CreateTemplateDto
   ): Promise<Template> {
-    const existingTemplate = await this.findOneNullable({ name: dto.name });
+    const existingTemplate = await this.findOneNullable({
+      name: dto.name,
+      userGuid
+    });
 
     if (existingTemplate) {
       throw new UnprocessableEntityException(
@@ -70,6 +75,7 @@ export class TemplatesService {
       id: props.id,
       guid: props.guid,
       name: props.name,
+      userGuid: props.userGuid,
       archiveFileName: props.archiveFileName
     });
   }

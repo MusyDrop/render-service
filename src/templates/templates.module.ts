@@ -10,6 +10,7 @@ import { Template } from './entities/template.entity';
 @Module({
   imports: [ConfigModule, S3Module, TypeOrmModule.forFeature([Template])],
   controllers: [TemplatesController],
-  providers: [TemplatesService, TemplatesCrdMapper]
+  providers: [TemplatesService, TemplatesCrdMapper],
+  exports: [TemplatesService]
 })
 export class TemplatesModule {}

@@ -4,12 +4,14 @@ import {
   DeleteDateColumn,
   Entity,
   Generated,
+  Unique,
   UpdateDateColumn
 } from 'typeorm';
 import { PrimaryGeneratedColumn } from 'typeorm';
 import { TemplateDto } from '../dto/template.dto';
 
 @Entity('templates')
+@Unique(['name', 'userGuid'])
 export class Template {
   @PrimaryGeneratedColumn()
   id: number;
@@ -18,11 +20,14 @@ export class Template {
   @Column()
   guid: string;
 
-  @Column({ unique: true })
+  @Column()
   name: string;
 
-  @Column({ unique: true })
+  @Column({ unique: true, name: 'archive_file_name' })
   archiveFileName: string;
+
+  @Column({ type: 'uuid', name: 'user_guid' })
+  userGuid: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
@@ -38,7 +43,8 @@ export class Template {
     return {
       guid: template.guid,
       name: template.name,
-      archiveFileName: template.archiveFileName
+      archiveFileName: template.archiveFileName,
+      userGuid: template.userGuid
     };
   }
 }

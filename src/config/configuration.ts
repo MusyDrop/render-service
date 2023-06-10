@@ -9,6 +9,10 @@ import {
 } from './schemas/postgres-config';
 import { SentryConfig, sentryConfigSchema } from './schemas/sentry-config';
 import { KafkaConfig, kafkaConfigSchema } from './schemas/kafka-config';
+import {
+  MicroservicesConfig,
+  microservicesConfigSchema
+} from './schemas/microservices-config';
 
 // the keys from here in the custom config service
 export interface AppConfig {
@@ -18,6 +22,7 @@ export interface AppConfig {
   postgres: PostgresConfig;
   sentry: SentryConfig;
   kafka: KafkaConfig;
+  microservices: MicroservicesConfig;
 }
 
 export const appSchema = (): JoiAppConfig<AppConfig> => ({
@@ -26,7 +31,8 @@ export const appSchema = (): JoiAppConfig<AppConfig> => ({
   minio: minioConfigSchema(),
   postgres: postgresConfigSchema(),
   sentry: sentryConfigSchema(),
-  kafka: kafkaConfigSchema()
+  kafka: kafkaConfigSchema(),
+  microservices: microservicesConfigSchema()
 });
 
 export const configuration = (): AppConfig => {

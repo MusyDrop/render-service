@@ -7,5 +7,6 @@ export class JobDto {
   templateGuid: string;
   audioFileName: string;
   settings: AnyObject;
+  userGuid: string;
   createdAt: Date;
 }
