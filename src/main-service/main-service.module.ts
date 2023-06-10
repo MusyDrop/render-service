@@ -14,6 +14,7 @@ import { ExtendedConfigService } from '../config/extended-config.service';
       })
     })
   ],
-  providers: [MainServiceApiClient]
+  providers: [MainServiceApiClient],
+  exports: [MainServiceApiClient]
 })
 export class MainServiceModule {}

@@ -6,11 +6,11 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { ParsedCookiesPayload } from './parsed-cookies-payload.interface';
-import { MainServiceApiClient } from '../main-service/main-service.api-client';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  constructor(private readonly mainServiceApiClient: MainServiceApiClient) {}
+  constructor(private readonly authService: AuthService) {}
 
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -22,7 +22,7 @@ export class AuthGuard implements CanActivate {
       );
     }
 
-    const { user } = await this.mainServiceApiClient.findUserInfoByAccessToken(
+    const { user } = await this.authService.findUserInfoByAccessToken(
       cookies.Auth
     );
 
