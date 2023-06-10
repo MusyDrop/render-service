@@ -46,20 +46,6 @@ export class JobsController {
   }
 
   @UseGuards(AuthGuard)
-  @Patch('/:guid')
-  public async update(
-    @Param('guid') guid: string,
-    @Body() dto: UpdateJobDto
-  ): Promise<SuccessResponseDto> {
-    await this.jobsService.update({
-      guid,
-      status: dto.status,
-      settings: dto.settings
-    });
-    return this.responseMapper.updateMapper();
-  }
-
-  @UseGuards(AuthGuard)
   @Post('/guid')
   public async render(
     @Param('guid') guid: string,

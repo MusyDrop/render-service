@@ -30,10 +30,6 @@ export class JobsCrdMapper implements ResponseDtoMapper<JobsController> {
     };
   }
 
-  public updateMapper(): SuccessResponseDto {
-    return new SuccessResponseDto('Update job');
-  }
-
   public renderMapper(job: Job): RenderJobResponseDto {
     return {
       job: Job.toDto(job) as JobDto

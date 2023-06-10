@@ -7,6 +7,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Job } from './entities/job.entity';
 import { TemplatesModule } from '../templates/templates.module';
 import { AuthModule } from '../auth/auth.module';
+import { JobsSystemController } from './jobs-system.controller';
+import { JobsSystemCrdMapper } from './mappers/JobsSystemCrdMapper';
 
 @Module({
   imports: [
@@ -15,7 +17,7 @@ import { AuthModule } from '../auth/auth.module';
     TemplatesModule,
     AuthModule
   ],
-  controllers: [JobsController],
-  providers: [JobsService, JobsCrdMapper]
+  controllers: [JobsController, JobsSystemController],
+  providers: [JobsService, JobsCrdMapper, JobsSystemCrdMapper]
 })
 export class JobsModule {}
