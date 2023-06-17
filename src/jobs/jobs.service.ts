@@ -137,7 +137,8 @@ export class JobsService {
       jobGuid: job.guid,
       settings: job.settings,
       archiveFileName: job.template.archiveFileName,
-      audioFileName: job.audioFileName
+      audioFileName: job.audioFileName,
+      projectGuid: job.projectGuid
     });
 
     return await this.findOne({ id: job.id });

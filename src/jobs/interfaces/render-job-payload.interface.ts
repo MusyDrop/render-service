@@ -5,4 +5,5 @@ export interface RenderJobPayload {
   archiveFileName: string;
   audioFileName: string;
   settings: AnyObject;
+  projectGuid: string;
 }
