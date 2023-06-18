@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   Injectable,
   NotFoundException,
   UnprocessableEntityException
@@ -46,17 +47,6 @@ export class TemplatesService {
     archive: Buffer,
     dto: CreateTemplateDto
   ): Promise<Template> {
-    const existingTemplate = await this.findOneNullable({
-      name: dto.name,
-      userGuid
-    });
-
-    if (existingTemplate) {
-      throw new UnprocessableEntityException(
-        'Template with this name already exists'
-      );
-    }
-
     const archiveFileName = await this.s3Service.putObject(
       this.config.get('minio.buckets.templatesBucket'),
       archive
@@ -79,5 +69,32 @@ export class TemplatesService {
       userGuid: props.userGuid,
       archiveFileName: props.archiveFileName
     });
+  }
+
+  public async update(
+    userGuid: string,
+    guid: string,
+    props: DeepPartial<Template>,
+    archive?: Buffer
+  ): Promise<Template> {
+    const template = await this.findOne({ guid, userGuid });
+
+    let archiveFileName;
+    if (archive) {
+      archiveFileName = await this.s3Service.putObject(
+        this.config.get('minio.buckets.templatesBucket'),
+        archive
+      );
+    }
+
+    await this.templatesRepository.update(
+      { guid, userGuid },
+      {
+        name: props.name,
+        archiveFileName: archiveFileName
+      }
+    );
+
+    return await this.findOne({ id: template.id });
   }
 }

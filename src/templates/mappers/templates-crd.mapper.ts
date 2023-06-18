@@ -6,6 +6,7 @@ import { Template } from '../entities/template.entity';
 import { TemplateDto } from '../dto/template.dto';
 import { GetAllTemplatesResponseDto } from '../dto/response/get-all-templates-response.dto';
 import { GetOneTemplateResponseDto } from '../dto/response/get-one-template-response.dto';
+import { UpdateTemplateResponseDto } from '../dto/response/update-template-response.dto';
 
 @Injectable()
 export class TemplatesCrdMapper
@@ -24,6 +25,12 @@ export class TemplatesCrdMapper
   }
 
   public findOneMapper(template: Template): GetOneTemplateResponseDto {
+    return {
+      template: Template.toDto(template) as TemplateDto
+    };
+  }
+
+  public updateMapper(template: Template): UpdateTemplateResponseDto {
     return {
       template: Template.toDto(template) as TemplateDto
     };

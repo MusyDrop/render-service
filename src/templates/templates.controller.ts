@@ -9,7 +9,8 @@ import {
   Get,
   UseGuards,
   Req,
-  Param
+  Param,
+  Put
 } from '@nestjs/common';
 import { TemplatesService } from './templates.service';
 import { CreateTemplateDto } from './dto/create-template.dto';
@@ -21,6 +22,11 @@ import { GetAllTemplatesResponseDto } from './dto/response/get-all-templates-res
 import { AuthGuard } from '../auth/auth.guard';
 import { Request } from 'express';
 import { GetOneTemplateResponseDto } from './dto/response/get-one-template-response.dto';
+import { ValidateUuidPipe } from '../common/pipes/validate-uuid.pipe';
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { TemplateDto } from './dto/template.dto';
+import { UpdateTemplateResponseDto } from './dto/response/update-template-response.dto';
+import { UpdateTemplateDto } from './dto/update-template.dto';
 
 @Controller('/templates')
 export class TemplatesController {
@@ -69,9 +75,39 @@ export class TemplatesController {
   @UseGuards(AuthGuard)
   @Get('/:guid')
   public async findOne(
-    @Param('guid') guid: string
+    @Param('guid', new ValidateUuidPipe()) guid: string,
+    @Req() req: Request
   ): Promise<GetOneTemplateResponseDto> {
     const template = await this.templatesService.findOne({ guid });
     return this.responseMapper.findOneMapper(template);
+  }
+
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('archive'))
+  @Put('/:guid')
+  public async update(
+    @Req() req: Request,
+    @Param('guid', new ValidateUuidPipe()) guid: string,
+    @Body() body: UpdateTemplateDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new FileTypeValidator({
+            fileType: 'application/zip'
+          })
+        ]
+      })
+    )
+    archive: Express.Multer.File
+  ): Promise<UpdateTemplateResponseDto> {
+    const template = await this.templatesService.update(
+      req.user.guid,
+      guid,
+      {
+        name: body.name
+      },
+      archive.buffer
+    );
+    return this.responseMapper.updateMapper(template);
   }
 }
