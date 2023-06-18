@@ -5,9 +5,9 @@ import { DeepPartial, Repository } from 'typeorm';
 import { TemplatesService } from '../templates/templates.service';
 import { NotFoundError } from 'rxjs';
 import { KafkaService } from '../kafka/kafka.service';
-import { AnyObject } from '../utils/utility-types';
 import { RenderJobPayload } from './interfaces/render-job-payload.interface';
 import { JobStatus } from './enums/job-status.enum';
+import { RenderJobDto } from './dtos/render-job.dto';
 
 @Injectable()
 export class JobsService {
@@ -124,12 +124,16 @@ export class JobsService {
   public async render(
     guid: string,
     userGuid: string,
-    settings: AnyObject
+    renderDetails: RenderJobDto
   ): Promise<Job> {
-    const job = await this.findOneWithTemplate({ guid, userGuid });
-    await this.updateById({
-      id: job.id,
-      settings,
+    const template = await this.templatesService.findOne({ guid });
+
+    const job = await this.create({
+      template,
+      audioFileName: renderDetails.audioFileName,
+      settings: renderDetails.settings,
+      projectGuid: renderDetails.projectGuid,
+      userGuid: userGuid,
       status: JobStatus.SUBMITTED
     });
 
