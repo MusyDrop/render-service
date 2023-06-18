@@ -141,7 +141,7 @@ export class JobsService {
     await this.kafkaService.emit<RenderJobPayload>(this.renderJobsTopicName, {
       jobGuid: job.guid,
       settings: job.settings,
-      archiveFileName: job.template.archiveFileName,
+      archiveFileName: template.archiveFileName,
       audioFileName: job.audioFileName,
       projectGuid: job.projectGuid
     });
