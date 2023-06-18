@@ -122,11 +122,12 @@ export class JobsService {
   }
 
   public async render(
-    guid: string,
     userGuid: string,
     renderDetails: RenderJobDto
   ): Promise<Job> {
-    const template = await this.templatesService.findOne({ guid });
+    const template = await this.templatesService.findOne({
+      guid: renderDetails.templateGuid
+    });
 
     const job = await this.create({
       template,

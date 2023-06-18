@@ -35,10 +35,9 @@ export class JobsController {
   @Post('/render')
   public async render(
     @Req() req: Request,
-    @Param('guid') guid: string,
     @Body() dto: RenderJobDto
   ): Promise<RenderJobResponseDto> {
-    const job = await this.jobsService.render(guid, req.user.guid, dto);
+    const job = await this.jobsService.render(req.user.guid, dto);
     return this.responseMapper.renderMapper(job);
   }
 }
