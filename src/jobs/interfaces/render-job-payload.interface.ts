@@ -6,4 +6,6 @@ export interface RenderJobPayload {
   audioFileName: string;
   settings: AnyObject;
   projectGuid: string;
+  compressedRms: number[];
+  audioDurationSecs: number;
 }

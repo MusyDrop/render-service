@@ -1,6 +1,8 @@
 import {
+  IsArray,
   IsDefined,
   IsNotEmpty,
+  IsNumber,
   IsObject,
   IsString,
   IsUUID
@@ -22,4 +24,11 @@ export class RenderJobDto {
   @IsObject()
   @IsDefined()
   settings: AnyObject;
+
+  @IsArray()
+  @IsNumber({}, { each: true })
+  compressedRms: number[];
+
+  @IsNumber()
+  audioDurationSecs: number;
 }

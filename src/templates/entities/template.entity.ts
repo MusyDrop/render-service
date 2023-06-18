@@ -11,7 +11,6 @@ import { PrimaryGeneratedColumn } from 'typeorm';
 import { TemplateDto } from '../dto/template.dto';
 
 @Entity('templates')
-@Unique(['name', 'userGuid'])
 export class Template {
   @PrimaryGeneratedColumn()
   id: number;

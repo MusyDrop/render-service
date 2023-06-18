@@ -10,7 +10,8 @@ import {
   UseGuards,
   Req,
   Param,
-  Put
+  Put,
+  Patch
 } from '@nestjs/common';
 import { TemplatesService } from './templates.service';
 import { CreateTemplateDto } from './dto/create-template.dto';
@@ -84,7 +85,7 @@ export class TemplatesController {
 
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('archive'))
-  @Put('/:guid')
+  @Patch('/:guid')
   public async update(
     @Req() req: Request,
     @Param('guid', new ValidateUuidPipe()) guid: string,

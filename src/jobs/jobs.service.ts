@@ -31,7 +31,8 @@ export class JobsService {
       audioFileName: props.audioFileName,
       settings: props.settings,
       userGuid: props.userGuid,
-      projectGuid: props.projectGuid
+      projectGuid: props.projectGuid,
+      status: props.status
     });
   }
 
@@ -143,7 +144,9 @@ export class JobsService {
       settings: job.settings,
       archiveFileName: template.archiveFileName,
       audioFileName: job.audioFileName,
-      projectGuid: job.projectGuid
+      projectGuid: job.projectGuid,
+      compressedRms: renderDetails.compressedRms,
+      audioDurationSecs: renderDetails.audioDurationSecs
     });
 
     return await this.findOne({ id: job.id });
