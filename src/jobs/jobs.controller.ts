@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Req,
   UseGuards
 } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { JobsCrdMapper } from './mappers/jobs-crd.mapper';
 import { GetAllJobsResponseDto } from './dtos/response/get-all-jobs-response.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { Request } from 'express';
+import { FindJobsQueryDto } from './dtos/find-jobs-query.dto';
 
 @Controller('/jobs')
 export class JobsController {
@@ -24,9 +26,13 @@ export class JobsController {
 
   @UseGuards(AuthGuard)
   @Get('/')
-  public async findAll(@Req() req: Request): Promise<GetAllJobsResponseDto> {
+  public async findAll(
+    @Req() req: Request,
+    @Query() queryDto: FindJobsQueryDto
+  ): Promise<GetAllJobsResponseDto> {
     const jobs = await this.jobsService.findAllWithTemplate({
-      userGuid: req.user.guid
+      userGuid: req.user.guid,
+      projectGuid: queryDto.projectGuid
     });
     return this.responseMapper.findAllMapper(jobs);
   }
